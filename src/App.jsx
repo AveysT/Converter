@@ -1,3 +1,4 @@
+import CurrencyConverter from './components/converter'
 import './App.css'
 
 function App() {
@@ -5,6 +6,7 @@ function App() {
 
   return (
     <>
+    <CurrencyConverter />
     </>
   )
 }
