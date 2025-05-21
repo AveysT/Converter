@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CurrencySelect from "./CurrencySelect";
 import AmountInput from "./AmountInput";
+import CurrencyChart from "./CurrencyChart";
 import { FaRotate } from "react-icons/fa6";
 
 function CurrencyConverter() {
@@ -41,50 +42,61 @@ function CurrencyConverter() {
   }, [fromCurrency, toCurrency, amount, convertedAmount]);
 
   return (
-    <section className="relative bg-white w-[80%] max-w-[1200px] flex flex-col place-content-center rounded-3xl mx-auto mt-20 p-10">
-      <div className="relative grid grid-cols-1 grid-rows-1 gap-2 min-[1200px]:grid-cols-[33%_1fr] md:grid-rows-none">
-        <div className="h-[90px] rounded-lg border border-solid border-gray-200 bg-white px-4 py-2 text-2xl font-semibold text-gray-600 hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-blue-400">
-          <label className="text-sm text-gray-400">Cantidad</label>
-          <AmountInput value={amount} onChange={setAmount} />
+    <main>
+      <article className="relative bg-white shadow-xl/10 w-[80%] max-w-[1200px] flex flex-col place-content-center rounded-3xl mx-auto mt-20 p-10 z-10">
+        <section className="relative grid grid-cols-1 grid-rows-1 gap-2 min-[1200px]:grid-cols-[33%_1fr] md:grid-rows-none">
+          <div className="h-[90px] rounded-lg border border-solid border-gray-200 bg-white px-4 py-2 text-2xl font-semibold text-gray-600 hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-blue-400">
+            <label className="text-sm text-gray-400">Cantidad</label>
+            <AmountInput value={amount} onChange={setAmount} />
+          </div>
+
+          <div className="relative flex flex-col justify-evenly items-center gap-6 md:flex-row">
+            <div className="relative flex h-[90px] w-full select-none flex-col justify-center rounded-lg border border-solid border-gray-200 bg-white font-semibold text-gray-600 hover:bg-gray-100 p-4">
+              <label className="text-sm text-gray-400 pl-2">Desde</label>
+              <CurrencySelect
+                value={fromCurrency}
+                onChange={setFromCurrency}
+                options={currencies}
+              />
+            </div>
+
+            <div
+              className="absolute flex justify-center items-center w-[45px] h-[45px] rounded-full text-2xl text-gray-600 bg-white border border-solid border-gray-200 z-10"
+              onClick={() => {
+                setFromCurrency(toCurrency);
+                setToCurrency(fromCurrency);
+              }}
+            >
+              <FaRotate />
+            </div>
+
+            <div className="relative flex h-[90px] w-full select-none flex-col justify-center rounded-lg border border-solid border-gray-200 bg-white font-semibold text-gray-600 hover:bg-gray-100 p-4">
+              <label className="text-sm text-gray-400 pl-2">A</label>
+              <CurrencySelect
+                value={toCurrency}
+                onChange={setToCurrency}
+                options={currencies}
+              />
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <h2 className="text-2xl font-semibold text-gray-600 mt-3 pl-4">
+            {amount} {getCurrencyName(fromCurrency)} =
+          </h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mt-3 pl-4">
+            {convertedAmount} {getCurrencyName(toCurrency)}
+          </h2>
+        </footer>
+      </article>
+
+      <article className="relative bg-white w-[80%] max-w-[1200px] top-[-20px] flex flex-col place-content-center rounded-b-3xl mx-auto p-10">
+        <div className="w-full ">
+          <CurrencyChart from={fromCurrency} to={toCurrency} />
         </div>
-
-        <div className="relative flex flex-col justify-evenly items-center gap-6 md:flex-row">
-          <div className="relative flex h-[90px] w-full select-none flex-col justify-center rounded-lg border border-solid border-gray-200 bg-white font-semibold text-gray-600 hover:bg-gray-100 p-4">
-            <label className="text-sm text-gray-400 pl-2">Desde</label>
-            <CurrencySelect
-              value={fromCurrency}
-              onChange={setFromCurrency}
-              options={currencies}
-            />
-          </div>
-
-          <div
-            className="absolute flex justify-center items-center w-[45px] h-[45px] rounded-full text-2xl text-gray-600 bg-white border border-solid border-gray-200 z-10"
-            onClick={() => {
-              setFromCurrency(toCurrency);
-              setToCurrency(fromCurrency);
-            }}
-          >
-            <FaRotate />
-          </div>
-
-          <div className="relative flex h-[90px] w-full select-none flex-col justify-center rounded-lg border border-solid border-gray-200 bg-white font-semibold text-gray-600 hover:bg-gray-100 p-4">
-            <label className="text-sm text-gray-400 pl-2">A</label>
-            <CurrencySelect
-              value={toCurrency}
-              onChange={setToCurrency}
-              options={currencies}
-            />
-          </div>
-        </div>
-      </div>
-      <h2 className="text-2xl font-semibold text-gray-600 mt-3 pl-4">
-        {amount} {getCurrencyName(fromCurrency)} =
-      </h2>
-      <h2 className="text-2xl font-semibold text-gray-800 mt-3 pl-4">
-        {convertedAmount} {getCurrencyName(toCurrency)}
-      </h2>
-    </section>
+      </article>
+    </main>
   );
 }
 
